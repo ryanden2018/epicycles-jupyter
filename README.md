@@ -5,4 +5,6 @@ This notebook would not have been possible for me without the excellent notes by
 
 Requires working Jupyter installation, scipy, matplotlib, and crucially, a working ffmpeg installation to run the notebook.
 
+An html5 version is also included.
+
 Only tested against Python ver. 3.6.5 via conda.
