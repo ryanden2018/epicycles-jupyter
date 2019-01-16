@@ -17,7 +17,49 @@ from scipy.linalg import circulant
 # In[2]:
 
 
-get_ipython().run_cell_magic('capture', '', "fig = plt.figure();\nfig.set_dpi(100);\nfig.set_size_inches(7,7);\nax = plt.axes(xlim=(-1.2,1.2),ylim=(-1.2,1.2));\npatch = plt.Circle((0,0),0.75,fc='none',ec='k',animated=True);\npatch2 = plt.Circle((.75,0),0.25,fc='none',ec='k',animated=True);\npatch3 = plt.Circle((1,0),0.05,fc='none',ec='k',animated=True);\npatch4 = plt.Circle((1.05,0),0.02,fc='k',ec='k',animated=True);\npatch7 = plt.Polygon(np.array([[1.05,0],[1.05,0],[1.05,0]]),\n                     closed=False,fc='none',ec='k');\n\ndef animate(i):\n    patch.center = (0, 0)\n    x, y = patch2.center\n    x = .75 * np.cos(np.radians(i))\n    y = .75 * np.sin(np.radians(i))\n    patch2.center = (x, y)\n    x, y = patch3.center\n    x = 0.75 * np.cos(np.radians(i)) + 0.25 * np.cos(np.radians(3*i))\n    y = 0.75 * np.sin(np.radians(i)) - 0.25 * np.sin(np.radians(3*i))\n    patch3.center = (x,y)\n    x, y = patch4.center\n    x = 0.75 * np.cos(np.radians(i)) + 0.25 * np.cos(np.radians(3*i))+\\\n        0.05*np.cos(np.radians(5*i))\n    y = 0.75 * np.sin(np.radians(i)) - 0.25 * np.sin(np.radians(3*i))+\\\n        0.05*np.sin(np.radians(5*i))\n    patch4.center = (x,y)\n    xy = patch7.get_xy()\n    xy = np.vstack((xy,np.array([x,y])))\n    patch7.set_xy(xy)\n    return [patch,patch2,patch3,patch4,patch7]\ndef init():\n    patch.center = (0,0)\n    patch2.center = (.75,0)\n    patch3.center = (1,0)\n    patch4.center = (1.05,0)\n    ax.add_patch(patch)\n    ax.add_patch(patch2)\n    ax.add_patch(patch3)\n    ax.add_patch(patch4)\n    ax.add_patch(patch7)\n    return [patch,patch2,patch3,patch4,patch7]\nanim = animation.FuncAnimation(fig,animate,\n            init_func=init,frames=360,interval=20,blit=True);")
+#%%capture
+fig = plt.figure();
+fig.set_dpi(100);
+fig.set_size_inches(7,7);
+ax = plt.axes(xlim=(-1.2,1.2),ylim=(-1.2,1.2));
+patch = plt.Circle((0,0),0.75,fc='none',ec='k',animated=True);
+patch2 = plt.Circle((.75,0),0.25,fc='none',ec='k',animated=True);
+patch3 = plt.Circle((1,0),0.05,fc='none',ec='k',animated=True);
+patch4 = plt.Circle((1.05,0),0.02,fc='k',ec='k',animated=True);
+patch7 = plt.Polygon(np.array([[1.05,0],[1.05,0],[1.05,0]]),
+                     closed=False,fc='none',ec='k');
+
+def animate(i):
+    patch.center = (0, 0)
+    x, y = patch2.center
+    x = .75 * np.cos(np.radians(i))
+    y = .75 * np.sin(np.radians(i))
+    patch2.center = (x, y)
+    x, y = patch3.center
+    x = 0.75 * np.cos(np.radians(i)) + 0.25 * np.cos(np.radians(3*i))
+    y = 0.75 * np.sin(np.radians(i)) - 0.25 * np.sin(np.radians(3*i))
+    patch3.center = (x,y)
+    x, y = patch4.center
+    x = 0.75 * np.cos(np.radians(i)) + 0.25 * np.cos(np.radians(3*i))+        0.05*np.cos(np.radians(5*i))
+    y = 0.75 * np.sin(np.radians(i)) - 0.25 * np.sin(np.radians(3*i))+        0.05*np.sin(np.radians(5*i))
+    patch4.center = (x,y)
+    xy = patch7.get_xy()
+    xy = np.vstack((xy,np.array([x,y])))
+    patch7.set_xy(xy)
+    return [patch,patch2,patch3,patch4,patch7]
+def init():
+    patch.center = (0,0)
+    patch2.center = (.75,0)
+    patch3.center = (1,0)
+    patch4.center = (1.05,0)
+    ax.add_patch(patch)
+    ax.add_patch(patch2)
+    ax.add_patch(patch3)
+    ax.add_patch(patch4)
+    ax.add_patch(patch7)
+    return [patch,patch2,patch3,patch4,patch7]
+anim = animation.FuncAnimation(fig,animate,
+            init_func=init,frames=360,interval=20,blit=True);
 
 
 # In[3]:
@@ -107,7 +149,67 @@ offsety = np.sum(libertyZ0interp[:,1])/sz
 # In[7]:
 
 
-get_ipython().run_cell_magic('capture', '', "N = 180\nfig = plt.figure();\nfig.set_dpi(100);\nfig.set_size_inches(7,7);\nax = plt.axes(xlim=(-300,300),ylim=(-300,300));\npatches = np.array([])\nfreqs = np.array([])\ncoeffs = np.array([])\nfor i in range(N+1):\n    if i%2 == 0:\n        coeffs = np.append(coeffs,libertyZ0interpfft[-int(i/2)-1])\n        freqs = np.append(freqs,-int(i/2)-1)\n    else:\n        coeffs = np.append(coeffs,libertyZ0interpfft[int(i/2)+1])\n        freqs = np.append(freqs,int((i-1)/2)+1)\n\nradii = np.abs(coeffs)\nfreqs /= 40\n\n# sort by radii\nbigarray = np.vstack((radii,coeffs.real,coeffs.imag,freqs)).T\nbigarray = bigarray[bigarray[:,0].argsort()[::-1]]\n    # courtesy Steve Tjoa, stackoverflow 5.13.2010\nradii = bigarray[:,0]\ncoeffs = bigarray[:,1]+1j*bigarray[:,2]\nfreqs = bigarray[:,3]\n\n\n# create initial patches\nstationary_circle = plt.Circle((offsetx,offsety),radii[0],fc='none',ec='k');\nfor i in range(N):\n    patches = np.append(patches,\n            plt.Circle((offsetx,offsety),radii[i+1],fc='none',ec='k',animated=True));\n\n# outline patch\npatchM = plt.Polygon(np.array([[-65,-135],[-65,-135],[-65,-135]]),\n                     closed=False,fc='none',ec='k');\n\ndef animate(i):\n    x = offsetx\n    y = offsety\n    for k in range(N):\n        zk = coeffs[k] * np.exp(1j*freqs[k]*i)\n        x += zk.real\n        y += zk.imag\n        patches[k].center = (x,y)\n    \n    xy = patchM.get_xy()\n    xy = np.vstack((xy,np.array([x,y])))\n    patchM.set_xy(xy)\n    return np.append(np.append(patches,patchM),stationary_circle)\ndef init():\n    for k in range(N):\n        patches[k].center = (offsetx,offsety)\n        ax.add_patch(patches[k])\n    ax.add_patch(patchM)\n    ax.add_patch(stationary_circle)\n    return np.append(np.append(patches,patchM),stationary_circle)\nanim = animation.FuncAnimation(fig,animate,\n            init_func=init,frames=360,interval=20,blit=True);")
+#%%capture
+N = 180
+fig = plt.figure();
+fig.set_dpi(100);
+fig.set_size_inches(7,7);
+ax = plt.axes(xlim=(-300,300),ylim=(-300,300));
+patches = np.array([])
+freqs = np.array([])
+coeffs = np.array([])
+for i in range(N+1):
+    if i%2 == 0:
+        coeffs = np.append(coeffs,libertyZ0interpfft[-int(i/2)-1])
+        freqs = np.append(freqs,-int(i/2)-1)
+    else:
+        coeffs = np.append(coeffs,libertyZ0interpfft[int(i/2)+1])
+        freqs = np.append(freqs,int((i-1)/2)+1)
+
+radii = np.abs(coeffs)
+freqs /= 40
+
+# sort by radii
+bigarray = np.vstack((radii,coeffs.real,coeffs.imag,freqs)).T
+bigarray = bigarray[bigarray[:,0].argsort()[::-1]]
+    # courtesy Steve Tjoa, stackoverflow 5.13.2010
+radii = bigarray[:,0]
+coeffs = bigarray[:,1]+1j*bigarray[:,2]
+freqs = bigarray[:,3]
+
+
+# create initial patches
+stationary_circle = plt.Circle((offsetx,offsety),radii[0],fc='none',ec='k');
+for i in range(N):
+    patches = np.append(patches,
+            plt.Circle((offsetx,offsety),radii[i+1],fc='none',ec='k',animated=True));
+
+# outline patch
+patchM = plt.Polygon(np.array([[-65,-135],[-65,-135],[-65,-135]]),
+                     closed=False,fc='none',ec='k');
+
+def animate(i):
+    x = offsetx
+    y = offsety
+    for k in range(N):
+        zk = coeffs[k] * np.exp(1j*freqs[k]*i)
+        x += zk.real
+        y += zk.imag
+        patches[k].center = (x,y)
+    
+    xy = patchM.get_xy()
+    xy = np.vstack((xy,np.array([x,y])))
+    patchM.set_xy(xy)
+    return np.append(np.append(patches,patchM),stationary_circle)
+def init():
+    for k in range(N):
+        patches[k].center = (offsetx,offsety)
+        ax.add_patch(patches[k])
+    ax.add_patch(patchM)
+    ax.add_patch(stationary_circle)
+    return np.append(np.append(patches,patchM),stationary_circle)
+anim = animation.FuncAnimation(fig,animate,
+            init_func=init,frames=360,interval=20,blit=True);
 
 
 # In[8]:

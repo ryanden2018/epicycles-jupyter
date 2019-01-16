@@ -23,7 +23,44 @@ from scipy.linalg import circulant
 # In[2]:
 
 
-get_ipython().run_cell_magic('capture', '', "fig = plt.figure();\nfig.set_dpi(100);\nfig.set_size_inches(7,7);\nax = plt.axes(xlim=(-1.2,1.2),ylim=(-1.2,1.2));\npatch = plt.Circle((0,0),1,fc='none',ec='k',animated=True);\npatch2 = plt.Circle((.5,0),0.5,fc='none',ec='k',animated=True);\npatch3 = plt.Polygon([[-1,0],[1,0]],closed=False,fc='none',ec='0.75');\npatch4 = plt.Circle((1,0),0.02,fc='k',ec='k',animated=True);\npatch7 = plt.Polygon(np.array([[1,0],[1,0],[1,0]]),\n                     closed=False,fc='none',ec='k');\n\ndef animate(i):\n    patch.center = (0, 0)\n    x, y = patch2.center\n    x = .5 * np.cos(np.radians(i))\n    y = .5 * np.sin(np.radians(i))\n    patch2.center = (x, y)\n    x, y = patch4.center\n    x = np.cos(np.radians(i))\n    y = 0\n    patch4.center = (x,y)\n    xy = patch7.get_xy()\n    xy = np.vstack((xy,np.array([x,y])))\n    patch7.set_xy(xy)\n    return [patch,patch2,patch3,patch4,patch7]\ndef init():\n    patch.center = (0,0)\n    patch2.center = (.5,0)\n    patch4.center = (1,0)\n    ax.add_patch(patch)\n    ax.add_patch(patch2)\n    ax.add_patch(patch3)\n    ax.add_patch(patch4)\n    ax.add_patch(patch7)\n    return [patch,patch2,patch3,patch4,patch7]\nanim = animation.FuncAnimation(fig,animate,\n            init_func=init,frames=360,interval=20,blit=True);")
+#%%capture
+fig = plt.figure();
+fig.set_dpi(100);
+fig.set_size_inches(7,7);
+ax = plt.axes(xlim=(-1.2,1.2),ylim=(-1.2,1.2));
+patch = plt.Circle((0,0),1,fc='none',ec='k',animated=True);
+patch2 = plt.Circle((.5,0),0.5,fc='none',ec='k',animated=True);
+patch3 = plt.Polygon([[-1,0],[1,0]],closed=False,fc='none',ec='0.75');
+patch4 = plt.Circle((1,0),0.02,fc='k',ec='k',animated=True);
+patch7 = plt.Polygon(np.array([[1,0],[1,0],[1,0]]),
+                     closed=False,fc='none',ec='k');
+
+def animate(i):
+    patch.center = (0, 0)
+    x, y = patch2.center
+    x = .5 * np.cos(np.radians(i))
+    y = .5 * np.sin(np.radians(i))
+    patch2.center = (x, y)
+    x, y = patch4.center
+    x = np.cos(np.radians(i))
+    y = 0
+    patch4.center = (x,y)
+    xy = patch7.get_xy()
+    xy = np.vstack((xy,np.array([x,y])))
+    patch7.set_xy(xy)
+    return [patch,patch2,patch3,patch4,patch7]
+def init():
+    patch.center = (0,0)
+    patch2.center = (.5,0)
+    patch4.center = (1,0)
+    ax.add_patch(patch)
+    ax.add_patch(patch2)
+    ax.add_patch(patch3)
+    ax.add_patch(patch4)
+    ax.add_patch(patch7)
+    return [patch,patch2,patch3,patch4,patch7]
+anim = animation.FuncAnimation(fig,animate,
+            init_func=init,frames=360,interval=20,blit=True);
 
 
 # In[3]:
@@ -37,7 +74,55 @@ HTML(anim.to_html5_video())
 # In[4]:
 
 
-get_ipython().run_cell_magic('capture', '', "fig = plt.figure();\nfig.set_dpi(100);\nfig.set_size_inches(7,7);\nax = plt.axes(xlim=(-1.2,1.2),ylim=(-1.2,1.2));\npatch = plt.Circle((0,0),1,fc='none',ec='k',animated=True);\npatch2 = plt.Circle((.75,0),0.25,fc='none',ec='k',animated=True);\npatch4 = plt.Circle((1,0),0.02,fc='k',ec='k',animated=True);\npatch7 = plt.Polygon(np.array([[1,0],[1,0],[1,0]]),\n                     closed=False,fc='none',ec='k');\n\n# construct an astroid\nZ0 = np.zeros([500,2])\nZ0[:,0] = np.linspace(-0.9999,0.9999,500)\nZ0[:,1] = np.power( np.abs( np.power(np.abs(Z0[:,0]),0.66666)-1) , 1.5 )\nZ1 = np.zeros([500,2])\nZ1[:,0] = Z0[:,0]\nZ1[:,1] = (-1)*Z0[:,1]\npatch5 = plt.Polygon(Z0,closed=False,fc='none',ec='0.75');\npatch6 = plt.Polygon(Z1,closed=False,fc='none',ec='0.75');\n\n\ndef animate(i):\n    patch.center = (0, 0)\n    x, y = patch2.center\n    x = .75 * np.cos(np.radians(i))\n    y = .75 * np.sin(np.radians(i))\n    patch2.center = (x, y)\n    x, y = patch4.center\n    x = 0.75 * np.cos(np.radians(i)) + 0.25 * np.cos(np.radians(3*i))\n    y = 0.75 * np.sin(np.radians(i)) - 0.25 * np.sin(np.radians(3*i))\n    patch4.center = (x,y)\n    xy = patch7.get_xy()\n    xy = np.vstack((xy,np.array([x,y])))\n    patch7.set_xy(xy)\n    return [patch,patch2,patch4,patch5,patch6,patch7]\ndef init():\n    patch.center = (0,0)\n    patch2.center = (.75,0)\n    patch4.center = (1,0)\n    ax.add_patch(patch)\n    ax.add_patch(patch2)\n    ax.add_patch(patch4)\n    ax.add_patch(patch5)\n    ax.add_patch(patch6)\n    ax.add_patch(patch7)\n    return [patch,patch2,patch4,patch5,patch6,patch7]\nanim = animation.FuncAnimation(fig,animate,\n            init_func=init,frames=360,interval=20,blit=True);")
+#%%capture
+fig = plt.figure();
+fig.set_dpi(100);
+fig.set_size_inches(7,7);
+ax = plt.axes(xlim=(-1.2,1.2),ylim=(-1.2,1.2));
+patch = plt.Circle((0,0),1,fc='none',ec='k',animated=True);
+patch2 = plt.Circle((.75,0),0.25,fc='none',ec='k',animated=True);
+patch4 = plt.Circle((1,0),0.02,fc='k',ec='k',animated=True);
+patch7 = plt.Polygon(np.array([[1,0],[1,0],[1,0]]),
+                     closed=False,fc='none',ec='k');
+
+# construct an astroid
+Z0 = np.zeros([500,2])
+Z0[:,0] = np.linspace(-0.9999,0.9999,500)
+Z0[:,1] = np.power( np.abs( np.power(np.abs(Z0[:,0]),0.66666)-1) , 1.5 )
+Z1 = np.zeros([500,2])
+Z1[:,0] = Z0[:,0]
+Z1[:,1] = (-1)*Z0[:,1]
+patch5 = plt.Polygon(Z0,closed=False,fc='none',ec='0.75');
+patch6 = plt.Polygon(Z1,closed=False,fc='none',ec='0.75');
+
+
+def animate(i):
+    patch.center = (0, 0)
+    x, y = patch2.center
+    x = .75 * np.cos(np.radians(i))
+    y = .75 * np.sin(np.radians(i))
+    patch2.center = (x, y)
+    x, y = patch4.center
+    x = 0.75 * np.cos(np.radians(i)) + 0.25 * np.cos(np.radians(3*i))
+    y = 0.75 * np.sin(np.radians(i)) - 0.25 * np.sin(np.radians(3*i))
+    patch4.center = (x,y)
+    xy = patch7.get_xy()
+    xy = np.vstack((xy,np.array([x,y])))
+    patch7.set_xy(xy)
+    return [patch,patch2,patch4,patch5,patch6,patch7]
+def init():
+    patch.center = (0,0)
+    patch2.center = (.75,0)
+    patch4.center = (1,0)
+    ax.add_patch(patch)
+    ax.add_patch(patch2)
+    ax.add_patch(patch4)
+    ax.add_patch(patch5)
+    ax.add_patch(patch6)
+    ax.add_patch(patch7)
+    return [patch,patch2,patch4,patch5,patch6,patch7]
+anim = animation.FuncAnimation(fig,animate,
+            init_func=init,frames=360,interval=20,blit=True);
 
 
 # In[5]:
@@ -53,7 +138,50 @@ HTML(anim.to_html5_video())
 # In[6]:
 
 
-get_ipython().run_cell_magic('capture', '', "fig = plt.figure();\nfig.set_dpi(100);\nfig.set_size_inches(7,7);\nax = plt.axes(xlim=(-3.5,3.5),ylim=(-3.5,3.5));\npatch = plt.Circle((0,0),1,fc='none',ec='k',animated=True);\npatch2 = plt.Circle((2,0),1,fc='none',ec='k',animated=True);\npatch4 = plt.Circle((1,0),0.05,fc='k',ec='k',animated=True);\npatch7 = plt.Polygon(np.array([[1,0],[1,0],[1,0]]),\n                     closed=False,fc='none',ec='k');\n\n# construct a cardioid\nZ0 = np.zeros([500,2])\nphi = np.linspace(0,2*np.pi,500)\nZ0[:,0] = 2*((-1)*np.cos(phi)+1)*np.cos(phi)+1\nZ0[:,1] = 2*((-1)*np.cos(phi)+1)*np.sin(phi)\npatch5 = plt.Polygon(Z0,closed=False,fc='none',ec='0.75');\n\ndef animate(i):\n    patch.center = (0, 0)\n    x, y = patch2.center\n    x = 2 * np.cos(np.radians(i))\n    y = 2 * np.sin(np.radians(i))\n    patch2.center = (x, y)\n    x, y = patch4.center\n    x = 2 * np.cos(np.radians(i)) - np.cos(np.radians(2*i))\n    y = 2 * np.sin(np.radians(i)) - np.sin(np.radians(2*i))\n    patch4.center = (x,y)\n    xy = patch7.get_xy()\n    xy = np.vstack((xy,np.array([x,y])))\n    patch7.set_xy(xy)\n    return [patch,patch2,patch4,patch5,patch7]\ndef init():\n    patch.center = (0,0)\n    patch2.center = (.75,0)\n    patch4.center = (1,0)\n    ax.add_patch(patch)\n    ax.add_patch(patch2)\n    ax.add_patch(patch4)\n    ax.add_patch(patch5)\n    ax.add_patch(patch7)\n    return [patch,patch2,patch4,patch5,patch7]\nanim = animation.FuncAnimation(fig,animate,\n            init_func=init,frames=360,interval=20,blit=True);")
+#%%capture
+fig = plt.figure();
+fig.set_dpi(100);
+fig.set_size_inches(7,7);
+ax = plt.axes(xlim=(-3.5,3.5),ylim=(-3.5,3.5));
+patch = plt.Circle((0,0),1,fc='none',ec='k',animated=True);
+patch2 = plt.Circle((2,0),1,fc='none',ec='k',animated=True);
+patch4 = plt.Circle((1,0),0.05,fc='k',ec='k',animated=True);
+patch7 = plt.Polygon(np.array([[1,0],[1,0],[1,0]]),
+                     closed=False,fc='none',ec='k');
+
+# construct a cardioid
+Z0 = np.zeros([500,2])
+phi = np.linspace(0,2*np.pi,500)
+Z0[:,0] = 2*((-1)*np.cos(phi)+1)*np.cos(phi)+1
+Z0[:,1] = 2*((-1)*np.cos(phi)+1)*np.sin(phi)
+patch5 = plt.Polygon(Z0,closed=False,fc='none',ec='0.75');
+
+def animate(i):
+    patch.center = (0, 0)
+    x, y = patch2.center
+    x = 2 * np.cos(np.radians(i))
+    y = 2 * np.sin(np.radians(i))
+    patch2.center = (x, y)
+    x, y = patch4.center
+    x = 2 * np.cos(np.radians(i)) - np.cos(np.radians(2*i))
+    y = 2 * np.sin(np.radians(i)) - np.sin(np.radians(2*i))
+    patch4.center = (x,y)
+    xy = patch7.get_xy()
+    xy = np.vstack((xy,np.array([x,y])))
+    patch7.set_xy(xy)
+    return [patch,patch2,patch4,patch5,patch7]
+def init():
+    patch.center = (0,0)
+    patch2.center = (.75,0)
+    patch4.center = (1,0)
+    ax.add_patch(patch)
+    ax.add_patch(patch2)
+    ax.add_patch(patch4)
+    ax.add_patch(patch5)
+    ax.add_patch(patch7)
+    return [patch,patch2,patch4,patch5,patch7]
+anim = animation.FuncAnimation(fig,animate,
+            init_func=init,frames=360,interval=20,blit=True);
 
 
 # In[7]:
@@ -84,7 +212,56 @@ HTML(anim.to_html5_video())
 # In[8]:
 
 
-get_ipython().run_cell_magic('capture', '', "fig = plt.figure();\nfig.set_dpi(100);\nfig.set_size_inches(7,7);\nax = plt.axes(xlim=(-1.2,1.2),ylim=(-1.2,1.2));\npatch = plt.Circle((0,0),0.75,fc='none',ec='k',animated=True);\npatch2 = plt.Circle((.75,0),0.25,fc='none',ec='k',animated=True);\npatch4 = plt.Circle((1,0),0.02,fc='k',ec='k',animated=True);\npatch7 = plt.Polygon(np.array([[1,0],[1,0],[1,0]]),\n                     closed=False,fc='none',ec='k');\n\n\n# construct an astroid\nZ0 = np.zeros([500,2])\nZ0[:,0] = np.linspace(-0.9999,0.9999,500)\nZ0[:,1] = np.power( np.abs( np.power(np.abs(Z0[:,0]),0.66666)-1) , 1.5 )\nZ1 = np.zeros([500,2])\nZ1[:,0] = Z0[:,0]\nZ1[:,1] = (-1)*Z0[:,1]\npatch5 = plt.Polygon(Z0,closed=False,fc='none',ec='0.75');\npatch6 = plt.Polygon(Z1,closed=False,fc='none',ec='0.75');\n\n\ndef animate(i):\n    patch.center = (0, 0)\n    x, y = patch2.center\n    x = .75 * np.cos(np.radians(i))\n    y = .75 * np.sin(np.radians(i))\n    patch2.center = (x, y)\n    x, y = patch4.center\n    x = 0.75 * np.cos(np.radians(i)) + 0.25 * np.cos(np.radians(3*i))\n    y = 0.75 * np.sin(np.radians(i)) - 0.25 * np.sin(np.radians(3*i))\n    patch4.center = (x,y)\n    xy = patch7.get_xy()\n    xy = np.vstack((xy,np.array([x,y])))\n    patch7.set_xy(xy)\n    return [patch,patch2,patch4,patch5,patch6,patch7]\ndef init():\n    patch.center = (0,0)\n    patch2.center = (.75,0)\n    patch4.center = (1,0)\n    ax.add_patch(patch)\n    ax.add_patch(patch2)\n    ax.add_patch(patch4)\n    ax.add_patch(patch5)\n    ax.add_patch(patch6)\n    ax.add_patch(patch7)\n    return [patch,patch2,patch4,patch5,patch6,patch7]\nanim = animation.FuncAnimation(fig,animate,\n            init_func=init,frames=360,interval=20,blit=True);")
+#%%capture
+fig = plt.figure();
+fig.set_dpi(100);
+fig.set_size_inches(7,7);
+ax = plt.axes(xlim=(-1.2,1.2),ylim=(-1.2,1.2));
+patch = plt.Circle((0,0),0.75,fc='none',ec='k',animated=True);
+patch2 = plt.Circle((.75,0),0.25,fc='none',ec='k',animated=True);
+patch4 = plt.Circle((1,0),0.02,fc='k',ec='k',animated=True);
+patch7 = plt.Polygon(np.array([[1,0],[1,0],[1,0]]),
+                     closed=False,fc='none',ec='k');
+
+
+# construct an astroid
+Z0 = np.zeros([500,2])
+Z0[:,0] = np.linspace(-0.9999,0.9999,500)
+Z0[:,1] = np.power( np.abs( np.power(np.abs(Z0[:,0]),0.66666)-1) , 1.5 )
+Z1 = np.zeros([500,2])
+Z1[:,0] = Z0[:,0]
+Z1[:,1] = (-1)*Z0[:,1]
+patch5 = plt.Polygon(Z0,closed=False,fc='none',ec='0.75');
+patch6 = plt.Polygon(Z1,closed=False,fc='none',ec='0.75');
+
+
+def animate(i):
+    patch.center = (0, 0)
+    x, y = patch2.center
+    x = .75 * np.cos(np.radians(i))
+    y = .75 * np.sin(np.radians(i))
+    patch2.center = (x, y)
+    x, y = patch4.center
+    x = 0.75 * np.cos(np.radians(i)) + 0.25 * np.cos(np.radians(3*i))
+    y = 0.75 * np.sin(np.radians(i)) - 0.25 * np.sin(np.radians(3*i))
+    patch4.center = (x,y)
+    xy = patch7.get_xy()
+    xy = np.vstack((xy,np.array([x,y])))
+    patch7.set_xy(xy)
+    return [patch,patch2,patch4,patch5,patch6,patch7]
+def init():
+    patch.center = (0,0)
+    patch2.center = (.75,0)
+    patch4.center = (1,0)
+    ax.add_patch(patch)
+    ax.add_patch(patch2)
+    ax.add_patch(patch4)
+    ax.add_patch(patch5)
+    ax.add_patch(patch6)
+    ax.add_patch(patch7)
+    return [patch,patch2,patch4,patch5,patch6,patch7]
+anim = animation.FuncAnimation(fig,animate,
+            init_func=init,frames=360,interval=20,blit=True);
 
 
 # In[9]:
